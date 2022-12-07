@@ -10,8 +10,12 @@ export default class UsersController {
   }
   public async UserRegister({ request, response }: HttpContextContract) {
     const data = request.only(['email', 'password'])
-
+    const file = request.file('file')
     const user = await User.create(data)
+
+    await user.related('profile').create({
+      title: 'Adonis 101',
+    })
 
     return response.created({ user })
   }
